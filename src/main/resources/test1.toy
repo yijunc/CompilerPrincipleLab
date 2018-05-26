@@ -1,17 +1,1 @@
-if(a==2) then {
-	a=a+1;
-}
-
-if(b!=2) then{
-	b=b+1;
-}
-real c = 3.1415;
-int d = 6;
-real e = 3.14e-102; //This is comment.
-while(1) then{
-	if(a<=b+c){
-		b=c+b;
-	}else {
-		b=c-b;
-	}
-}
+if(a==2)\r\nthen\r\n{\r\na=a+1;\r\n}\r\n
