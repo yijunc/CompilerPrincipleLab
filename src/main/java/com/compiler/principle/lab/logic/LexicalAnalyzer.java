@@ -17,7 +17,7 @@ public class LexicalAnalyzer {
 
     public static void compileLexConfig() throws Exception {
         lexSrcFile = ResourceUtils.getFile("classpath:lex.yy.c");
-        String command = "gcc -o " + lexSrcFile.getParent() + "\\lexyyc" + " " + lexSrcFile.getAbsolutePath();
+        String command = "gcc -o " + lexSrcFile.getParent() + "/lexyyc" + " " + lexSrcFile.getAbsolutePath();
         System.out.println("Compiling Lex config...");
         System.out.println(command);
         Process ps = Runtime.getRuntime().exec(command);
@@ -31,86 +31,71 @@ public class LexicalAnalyzer {
 
     public static void saveSourceFile(String sourceCode) throws Exception {
         System.out.println("Saving Files...");
-        System.out.println(lexSrcFile.getParent() + "\\" + UUID.randomUUID().toString());
-        sourceFile = new File(lexSrcFile.getParent() + "\\" + UUID.randomUUID().toString());
+        sourceFile = new File(lexSrcFile.getParent() + "/sourceCode.toy");
+        System.out.println(sourceFile.getAbsolutePath());
         FileWriter writer = new FileWriter(sourceFile);
         writer.write(sourceCode);
         writer.flush();
         writer.close();
     }
 
-    public static List<LexToken> lexAnalyzer(String src) throws Exception{
-        List<LexToken> ret = new ArrayList<>();
+    public static LexResponse lexAnalyzer() throws Exception {
+        List<LexToken> retToken = new ArrayList<>();
+        LexResponse ret = new LexResponse();
         String line;
-        File srcFile = new File(src);
-        String fileName = srcFile.getName();
-        fileName = fileName.substring(0,
-                fileName.lastIndexOf(".") == -1 ? fileName.length() : fileName.lastIndexOf("."));
-        String formatStr = "%-20s %-25s %-15s %-15s";
         long startTime = System.currentTimeMillis();
         List<String> command = new ArrayList<>();
         String osName = System.getProperty("os.name").toLowerCase();
-        if (osName.contains("windows")) {
-            command.add("cmd");
-            command.add("/c");
-            command.add(".\\" + lexSrcFile.getParent() + "\\lexyyc" + ".exe < " + src);
+        if (osName.contains("linux")) {
+            command.add("sh");
+            command.add("-c");
+            command.add(lexSrcFile.getParent() + "/lexyyc" + " < " + sourceFile.getAbsolutePath());
         } else {
             throw new Exception("Unsupported Operating System.");
         }
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process ps = processBuilder.start();
-        // System.out.println(command);
         BufferedInputStream inputStream = new BufferedInputStream(ps.getInputStream());
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-        File tokenedFile = new File(fileName + ".tok");
-        FileWriter fw = new FileWriter(tokenedFile);
-        BufferedWriter writer = new BufferedWriter(fw);
         while ((line = br.readLine()) != null) {
             String[] tokenInfo = line.split("\t+");
-            // for(int i = 0; i < tokenInfo.length;i++){
-            // System.out.println(tokenInfo[i]);
-            // }
-            System.out.println(String.format(formatStr, tokenInfo[0], tokenInfo[1], tokenInfo[2], tokenInfo[3]));
-            ret.add(new LexToken(tokenInfo[0], tokenInfo[1], tokenInfo[2], tokenInfo[3]));
-            writer.write(String.format(formatStr, tokenInfo[0], tokenInfo[1], tokenInfo[2], tokenInfo[3]));
-            writer.newLine();
+            for (int i = 0; i < tokenInfo.length; i++) {
+                System.out.print(tokenInfo[i] + " ");
+            }
+            System.out.println();
+            retToken.add(new LexToken(tokenInfo[0], tokenInfo[1], tokenInfo[2], tokenInfo[3]));
         }
+
+        ret.setTokens(retToken);
 
         boolean hasError = false;
         BufferedInputStream errorStream = new BufferedInputStream(ps.getErrorStream());
         BufferedReader ebr = new BufferedReader(new InputStreamReader(errorStream));
-        while ((line = ebr.readLine()) != null) {
+        while ((line = ebr.readLine()) != null ) {
+            ret.setError(line);
             System.out.println(line);
             hasError = true;
-            writer.write(line);
-            writer.newLine();
         }
-
-        writer.flush();
-        writer.close();
-        fw.close();
         ps.waitFor();
+        long endTime = System.currentTimeMillis();
 
         if (hasError) {
-            throw new Exception("Lex Error In Source File: " + src);
+            ret.setStatus("lex error");
         }
-
-        long endTime = System.currentTimeMillis();
-        System.out.printf("Lexical Analyzed Source File: " + src + " in %d ms.\n", endTime - startTime);
+        else{
+            ret.setStatus(String.valueOf(endTime - startTime) + "ms");
+        }
+        
+        System.out.printf("Lexical Analyzed Source File: " + sourceFile.getAbsolutePath() + " in %d ms.\n", endTime - startTime);
         System.out.println(seperator);
         return ret;
     }
 
-    public static List<LexToken> analyze(String sourceCode) throws Exception {
+    public static LexResponse analyze(String sourceCode) throws Exception {
         compileLexConfig();
         saveSourceFile(sourceCode);
-
-        return null;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(UUID.randomUUID());
+        return lexAnalyzer();
     }
 }
 

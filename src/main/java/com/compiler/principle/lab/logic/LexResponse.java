@@ -7,6 +7,10 @@ public class LexResponse {
     List<LexToken> tokens;
     String error;
 
+    public LexResponse(){
+
+    }
+
     public LexResponse(String status, List<LexToken> tokens, String error) {
         this.status = status;
         this.tokens = tokens;
