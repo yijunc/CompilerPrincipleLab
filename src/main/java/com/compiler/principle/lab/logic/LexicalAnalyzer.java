@@ -86,7 +86,7 @@ public class LexicalAnalyzer {
         else{
             ret.setStatus(String.valueOf(endTime - startTime) + "ms");
         }
-        
+
         System.out.printf("Lexical Analyzed Source File: " + sourceFile.getAbsolutePath() + " in %d ms.\n", endTime - startTime);
         System.out.println(seperator);
         return ret;
