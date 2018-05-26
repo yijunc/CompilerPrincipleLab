@@ -1,5 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
-### Maven template
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -10,13 +10,9 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
-!/.mvn/wrapper/maven-wrapper.jar
-### Example user template template
-### Example user template
-
 # IntelliJ project files
 .idea
 *.iml
 out
 gen
+src/test/
