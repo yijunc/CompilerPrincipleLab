@@ -1,1 +1,0 @@
-if(a==2)\r\nthen\r\n{\r\na=a+1;\r\n}\r\n

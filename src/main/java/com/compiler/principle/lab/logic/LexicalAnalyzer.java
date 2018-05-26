@@ -46,7 +46,7 @@ public class LexicalAnalyzer {
         long startTime = System.currentTimeMillis();
         List<String> command = new ArrayList<>();
         String osName = System.getProperty("os.name").toLowerCase();
-        if (osName.contains("linux")) {
+        if (osName.contains("linux") || osName.contains("mac")) {
             command.add("sh");
             command.add("-c");
             command.add(lexSrcFile.getParent() + "/lexyyc" + " < " + sourceFile.getAbsolutePath());
@@ -72,7 +72,7 @@ public class LexicalAnalyzer {
         boolean hasError = false;
         BufferedInputStream errorStream = new BufferedInputStream(ps.getErrorStream());
         BufferedReader ebr = new BufferedReader(new InputStreamReader(errorStream));
-        while ((line = ebr.readLine()) != null ) {
+        while ((line = ebr.readLine()) != null) {
             ret.setError(line);
             System.out.println(line);
             hasError = true;
@@ -82,8 +82,7 @@ public class LexicalAnalyzer {
 
         if (hasError) {
             ret.setStatus("lex error");
-        }
-        else{
+        } else {
             ret.setStatus(String.valueOf(endTime - startTime) + "ms");
         }
 
