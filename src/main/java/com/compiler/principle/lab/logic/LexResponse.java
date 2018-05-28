@@ -7,7 +7,7 @@ public class LexResponse {
     List<LexToken> tokens;
     String error;
 
-    public LexResponse(){
+    public LexResponse() {
 
     }
 

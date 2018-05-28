@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Map;
 
 @RestController
@@ -13,7 +14,7 @@ import java.util.Map;
 public class LexController {
 
     @RequestMapping("/")
-    public String index(){
+    public String index() {
         return "Lex Controller";
     }
 
@@ -21,7 +22,7 @@ public class LexController {
     public LexResponse process(@RequestBody Map<String, String> payload) {
         try {
             return LexicalAnalyzer.analyze(payload.get("code"));
-        } catch (Exception e){
+        } catch (Exception e) {
             return new LexResponse("sys error", null, e.getMessage());
         }
 
