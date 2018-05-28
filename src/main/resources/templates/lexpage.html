@@ -196,7 +196,7 @@
 </section>
 </div>
     <script src="https://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/lex.js" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{js/lex.js}" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript">
     var editor = ace.edit("editor");
@@ -227,8 +227,6 @@
             var raw_code = editor.getValue();
             $client.lex_analyze(raw_code,function (ret,err) {
 
-                var code_json = {"code": "\"" + raw_code + "\""};
-
                 console.log(code_json);
 
                 if(ret) {
@@ -238,8 +236,6 @@
                 }
             });
         }
-
-
 
 
     </script>
