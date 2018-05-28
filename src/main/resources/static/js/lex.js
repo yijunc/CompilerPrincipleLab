@@ -8,7 +8,7 @@
 
     c.lex_analyze = function (raw_code, func) {
         var code_json = JSON.stringify({code:raw_code});
-        alert("1"+code_json);
+        console.log("code_json"+code_json);
         send_json("lex","analyze",code_json,func);
     };
 
@@ -21,16 +21,14 @@
 
         $.ajax({
             url: config.server + config.apiGate + moduleName + "/" + methodName,
-            timeout: 10,
+            timeout: 1000,
+            type:"post",
             method: 'post',
-            dataType: "jsonp",
+            dataType: "json",
             data: data,
-            jsonp:"callback",
+            contentType: "application/json; charset=utf-8",
             success:func
-        });
-
-
-        alert("2"+data.toString());
+            });
     };
 
     window.$client = c;
