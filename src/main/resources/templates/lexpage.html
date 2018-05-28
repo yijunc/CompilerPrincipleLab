@@ -136,16 +136,35 @@
             color: white;
             text-align: center;
             margin: 10px;
-            padding: 15px;
+            padding: 12px;
             text-decoration: none;
             font-size: 18px;
-            line-height: 20px;
+            line-height: 16px;
             border-radius: 4px;
         }
 
         .editor-footer button:hover {
             background-color: #ddd;
             color: dodgerblue;
+        }
+
+        .result-table-wrapper{
+            position: relative;
+            width: 100%;
+            /*min-height: 400px;*/
+            /*max-height: 800px;*/
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .result-table{
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .table-title{
+            background: #ddd;
         }
 
     </style>
@@ -182,12 +201,39 @@
                     }
                 </div>
             </div>
+            <!--editor-wrapper--!end-->
 
             <div class="editor-footer">
                 <div class="editor-footer-right">
-                    <button class="btn-blue" type="button" id="btn_submit" onclick="lex_analyze()"> Submit</button>
+                    <button class="btn-blue" type="button" id="btn_submit" onclick="lex_analyze()"> Analyze</button>
                 </div>
             </div>
+
+            <div class="result-table-wrapper" style="display: none">
+                <div class="">
+                    <table class="table table-hover result-table" id="result_table">
+                        <thead>
+                        <tr class="table-title">
+                            <th>#</th>
+                            <th>tokenType</th>
+                            <th>attributeValue</th>
+                            <th>lineNumber</th>
+                            <th>linePosition</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!--<tr id="result-row">-->
+                            <!--<th scope="row" id="resultId"></th>-->
+                            <!--<td id="resultTokenType"></td>-->
+                            <!--<td id="resultAttributeValue"></td>-->
+                            <!--<td id="resultLineNumber"></td>-->
+                            <!--<td id="resultLinePosition"></td>-->
+                        <!--</tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--result-table-wrapper--!end-->
         </div>
     </section>
 </div>
@@ -212,24 +258,36 @@
     }]);
 
     $(function () {
-        var editor = ace.edit("editor");
-        // alert(editor.getValue());
-        var btn_submit = $("#btn_submit");
-        // btn_submit.click(lex_analyze());
+
     });
 
     function lex_analyze() {
         var editor = ace.edit("editor");
         var raw_code = editor.getValue();
+        var $table_wrapper = $(".result-table-wrapper");
+        $table_wrapper.show();
         $client.lex_analyze(raw_code, function (data) {
             if (data) {
                 var tokens = data.tokens;
-                alert(tokens);
-                alert("22" + JSON.stringify(tokens));
+                fill_result_table(tokens);
             }
         });
     }
 
+    function fill_result_table(tokens) {
+        var $table = $("#result_table");
+        //谁能给我解释一下为什么html字符串会报错识别成奇怪的东西嗷！！！
+        for (var i = 0; i < tokens.length; i++) {
+            var $trTemp = $("<tr></tr>");
+            $trTemp.append("<th scope=\"row\">"+(i+1) +"</th>");
+            $trTemp.append("<td>"+tokens[i].tokenType +"</td>");
+            $trTemp.append("<td>"+tokens[i].attributeValue +"</td>");
+            $trTemp.append("<td>"+tokens[i].lineNumber +"</td>");
+            $trTemp.append("<td>"+tokens[i].linePosition +"</td>");
+            $table.append($trTemp);
+            //$trTemp.appendTo($table);
+        }
+    }
 
 </script>
 </body>
