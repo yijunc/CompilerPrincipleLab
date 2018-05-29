@@ -148,7 +148,7 @@
             color: dodgerblue;
         }
 
-        .result-table-wrapper{
+        .result-table-wrapper {
             position: relative;
             width: 100%;
             /*min-height: 400px;*/
@@ -158,12 +158,12 @@
             border-radius: 5px;
         }
 
-        .result-table{
+        .result-table {
             padding-left: 10px;
             padding-right: 10px;
         }
 
-        .table-title{
+        .table-title {
             background: #ddd;
         }
 
@@ -223,11 +223,11 @@
                         </thead>
                         <tbody>
                         <!--<tr id="result-row">-->
-                            <!--<th scope="row" id="resultId"></th>-->
-                            <!--<td id="resultTokenType"></td>-->
-                            <!--<td id="resultAttributeValue"></td>-->
-                            <!--<td id="resultLineNumber"></td>-->
-                            <!--<td id="resultLinePosition"></td>-->
+                        <!--<th scope="row" id="resultId"></th>-->
+                        <!--<td id="resultTokenType"></td>-->
+                        <!--<td id="resultAttributeValue"></td>-->
+                        <!--<td id="resultLineNumber"></td>-->
+                        <!--<td id="resultLinePosition"></td>-->
                         <!--</tr>-->
                         </tbody>
                     </table>
@@ -244,18 +244,8 @@
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/textmate");//clouds textmate xcode monokai
     editor.getSession().setMode("ace/mode/javascript");
-
-
-    var Range = require("ace/range").Range;
-    editor.session.addMarker(new Range(3, 0, 3, 1), 'ace_highlight-marker', 'fullLine');
-
     editor.session.setOption("useWorker", false);
-    editor.getSession().setAnnotations([{
-        row: 3,
-        column: 0,
-        text: "Error Message",
-        type: "error",
-    }]);
+
 
     $(function () {
 
@@ -266,12 +256,18 @@
         var raw_code = editor.getValue();
         $client.lex_analyze(raw_code, function (data) {
             if (data) {
-                if(data.error!==null||data.error!==""){
+                if (data.error == null || data.error == "") {
                     var tokens = data.tokens;
                     fill_result_table(tokens);
                 }
                 else {
-                    var error_msg = data.error;
+                    var error_msg = JSON.stringify(data.error);
+                    var temp = error_msg.split("\\\"");
+                    var character = temp[1];
+                    var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
+                    var position = error_msg.substring(error_msg.indexOf("position") + 9, error_msg.length - 2);
+                    console.log("character" + character + "|" + "line_num" + line_num + "|" + "position" + position);
+                    error_mark(character, line_num, position);
                 }
 
             }
@@ -284,14 +280,29 @@
         $("tr").remove(".append");
         for (var i = 0; i < tokens.length; i++) {
             var $trTemp = $("<tr class='append'></tr>");
-            $trTemp.append("<th scope=\"row\">"+(i+1) + "</th>");
-            $trTemp.append("<td>"+tokens[i].tokenType +"</td>");
-            $trTemp.append("<td>"+tokens[i].attributeValue +"</td>");
-            $trTemp.append("<td>"+tokens[i].lineNumber +"</td>");
-            $trTemp.append("<td>"+tokens[i].linePosition +"</td>");
+            $trTemp.append("<th scope=\"row\">" + (i + 1) + "</th>");
+            $trTemp.append("<td>" + tokens[i].tokenType + "</td>");
+            $trTemp.append("<td>" + tokens[i].attributeValue + "</td>");
+            $trTemp.append("<td>" + tokens[i].lineNumber + "</td>");
+            $trTemp.append("<td>" + tokens[i].linePosition + "</td>");
             $table.append($trTemp);
             //$trTemp.appendTo($table);
         }
+    }
+
+    function error_mark(character, line, position) {
+        $(".result-table-wrapper").hide();
+        $("tr").remove(".append");
+        var Range = require("ace/range").Range;
+        editor.session.addMarker(new Range(line, 0, line, 1), 'ace_highlight-marker', 'fullLine');
+
+        editor.session.setOption("useWorker", false);
+        editor.getSession().setAnnotations([{
+            row: line,
+            column: 0,
+            text: "Error Character: " + character + " in line " + (parseInt(line) + 1) + ",position " + position + ".",
+            type: "error",
+        }]);
     }
 
 </script>
