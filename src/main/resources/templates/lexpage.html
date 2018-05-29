@@ -183,7 +183,7 @@
         <div class="container">
             <div class="editor-wrapper">
                 <div id="editor">
-                    if(a==2) then {
+                    $if(a==2) then {
                     a=a+1;
                     }
 
@@ -242,14 +242,21 @@
 
 <script type="text/javascript">
     var editor = ace.edit("editor");
+    var marker_num;
     editor.setTheme("ace/theme/textmate");//clouds textmate xcode monokai
     editor.getSession().setMode("ace/mode/javascript");
     editor.session.setOption("useWorker", false);
 
 
+
     $(function () {
 
     });
+    // editor.setOptions({
+        //     enableBasicAutocompletion: true,
+        //     enableSnippets: true,
+        //     enableLiveAutocompletion: true
+        // });
 
     function lex_analyze() {
         var editor = ace.edit("editor");
@@ -257,17 +264,17 @@
         $client.lex_analyze(raw_code, function (data) {
             if (data) {
                 if (data.error == null || data.error == "") {
-                    var tokens = data.tokens;
+                    editor.session.removeMarker(marker_num);
+                    editor.getSession().clearAnnotations();
+                        var tokens = data.tokens;
                     fill_result_table(tokens);
                 }
                 else {
-                    var error_msg = JSON.stringify(data.error);
-                    var temp = error_msg.split("\\\"");
-                    var character = temp[1];
+                    var error_msg = JSON.stringify(data.error).replace(/\\/gm,"");
                     var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
                     var position = error_msg.substring(error_msg.indexOf("position") + 9, error_msg.length - 2);
-                    console.log("character" + character + "|" + "line_num" + line_num + "|" + "position" + position);
-                    error_mark(character, line_num, position);
+                    console.log("error_msg: "+error_msg+ "|" + "line_num" + line_num + "|" + "position" + position);
+                    error_mark(error_msg, line_num, position);
                 }
 
             }
@@ -290,17 +297,17 @@
         }
     }
 
-    function error_mark(character, line, position) {
+    function error_mark(err_msg, line, position) {
         $(".result-table-wrapper").hide();
         $("tr").remove(".append");
         var Range = require("ace/range").Range;
-        editor.session.addMarker(new Range(line, 0, line, 1), 'ace_highlight-marker', 'fullLine');
-
+        marker_num = editor.session.addMarker(new Range(line, 0, line, 1), 'ace_highlight-marker', 'fullLine');
+        console.log("marker_num"+marker_num);
         editor.session.setOption("useWorker", false);
         editor.getSession().setAnnotations([{
             row: line,
             column: 0,
-            text: "Error Character: " + character + " in line " + (parseInt(line) + 1) + ",position " + position + ".",
+            text: err_msg,
             type: "error",
         }]);
     }
