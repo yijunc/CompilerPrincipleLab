@@ -1,8 +1,7 @@
 package com.compiler.principle.lab.controller;
 
-import com.compiler.principle.lab.logic.LexResponse;
-import com.compiler.principle.lab.logic.LexicalAnalyzer;
-import org.springframework.stereotype.Controller;
+import com.compiler.principle.lab.logic.lex.LexResponse;
+import com.compiler.principle.lab.logic.lex.LexicalAnalyzer;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

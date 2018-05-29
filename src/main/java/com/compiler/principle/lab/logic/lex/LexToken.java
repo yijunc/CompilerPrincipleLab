@@ -1,4 +1,4 @@
-package com.compiler.principle.lab.logic;
+package com.compiler.principle.lab.logic.lex;
 
 
 public class LexToken {

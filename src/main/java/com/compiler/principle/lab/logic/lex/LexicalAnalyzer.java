@@ -1,11 +1,10 @@
-package com.compiler.principle.lab.logic;
+package com.compiler.principle.lab.logic.lex;
 
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class LexicalAnalyzer {
 
@@ -15,8 +14,8 @@ public class LexicalAnalyzer {
 
     private static String seperator = "======================================================================";
 
-    public static void compileLexConfig() throws Exception {
-        lexSrcFile = ResourceUtils.getFile("classpath:lex.yy.c");
+    private static void compileLexConfig() throws Exception {
+        lexSrcFile = ResourceUtils.getFile("classpath:lex/lex.yy.c");
         String command = "gcc -o " + lexSrcFile.getParent() + "/lexyyc" + " " + lexSrcFile.getAbsolutePath();
         System.out.println("Compiling Lex config...");
         System.out.println(command);
@@ -29,7 +28,7 @@ public class LexicalAnalyzer {
         }
     }
 
-    public static void saveSourceFile(String sourceCode) throws Exception {
+    private static void saveSourceFile(String sourceCode) throws Exception {
         System.out.println("Saving Files...");
         sourceFile = new File(lexSrcFile.getParent() + "/sourceCode.toy");
         System.out.println(sourceFile.getAbsolutePath());
@@ -39,7 +38,7 @@ public class LexicalAnalyzer {
         writer.close();
     }
 
-    public static LexResponse lexAnalyzer() throws Exception {
+    private static LexResponse lexAnalyzer() throws Exception {
         List<LexToken> retToken = new ArrayList<>();
         LexResponse ret = new LexResponse();
         String line;

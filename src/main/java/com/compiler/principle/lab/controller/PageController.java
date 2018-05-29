@@ -4,11 +4,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class PageController{
+public class PageController {
 
     @RequestMapping("/lexpage")
-    public String getLexPage(){
+    public String getLexPage() {
         return "lexpage";
+    }
+
+    @RequestMapping("/grammar")
+    public String getGrammarPage() {
+        return "grammarpage";
     }
 
 }

@@ -1,0 +1,16 @@
+{ } if ( ) then else while ID = < > <= >= == + - = * / NUM ;
+program
+program to compoundstmt
+stmt to ifstmt|whilestmt|assgstmt|compoundstmt
+compoundstmt to { stmts }
+stmts to stmt stmts | NULL
+ifstmt to if ( boolexpr ) then stmt else stmt
+whilestmt to while ( boolexpr ) stmt
+assgstmt to ID = arithexpr ;
+boolexpr to arithexpr boolop arithexpr
+boolop to <|>|<=|>=|==
+arithexpr to multexpr arithexprprime
+arithexprprime to + multexpr arithexprprime | - multexpr arithexprprime | NULL
+multexpr to simpleexpr multexprprime
+multexprprime to * simpleexpr multexprprime | / simpleexpr multexprprime | NULL
+simpleexpr to ID | NUM | ( arithexpr )
