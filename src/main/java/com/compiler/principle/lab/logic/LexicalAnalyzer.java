@@ -72,6 +72,7 @@ public class LexicalAnalyzer {
         boolean hasError = false;
         BufferedInputStream errorStream = new BufferedInputStream(ps.getErrorStream());
         BufferedReader ebr = new BufferedReader(new InputStreamReader(errorStream));
+
         while ((line = ebr.readLine()) != null) {
             ret.setError(line);
             System.out.println(line);

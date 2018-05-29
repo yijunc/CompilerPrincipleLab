@@ -264,22 +264,27 @@
     function lex_analyze() {
         var editor = ace.edit("editor");
         var raw_code = editor.getValue();
-        var $table_wrapper = $(".result-table-wrapper");
-        $table_wrapper.show();
         $client.lex_analyze(raw_code, function (data) {
             if (data) {
-                var tokens = data.tokens;
-                fill_result_table(tokens);
+                if(data.error!==null||data.error!==""){
+                    var tokens = data.tokens;
+                    fill_result_table(tokens);
+                }
+                else {
+                    var error_msg = data.error;
+                }
+
             }
         });
     }
 
     function fill_result_table(tokens) {
+        $(".result-table-wrapper").show();
         var $table = $("#result_table");
-        //谁能给我解释一下为什么html字符串会报错识别成奇怪的东西嗷！！！
+        $("tr").remove(".append");
         for (var i = 0; i < tokens.length; i++) {
-            var $trTemp = $("<tr></tr>");
-            $trTemp.append("<th scope=\"row\">"+(i+1) +"</th>");
+            var $trTemp = $("<tr class='append'></tr>");
+            $trTemp.append("<th scope=\"row\">"+(i+1) + "</th>");
             $trTemp.append("<td>"+tokens[i].tokenType +"</td>");
             $trTemp.append("<td>"+tokens[i].attributeValue +"</td>");
             $trTemp.append("<td>"+tokens[i].lineNumber +"</td>");
