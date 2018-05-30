@@ -1,9 +1,10 @@
 package com.compiler.principle.lab.logic.grammar;
 
-public class TerminalSymbol extends Symbol{
+public class TerminalSymbol extends Symbol {
 
     private Token mToken;
-    public TerminalSymbol(String name,Token token) {
+
+    public TerminalSymbol(String name, Token token) {
         super(name);
         mToken = token;
     }
@@ -18,12 +19,12 @@ public class TerminalSymbol extends Symbol{
 
     @Override
     public boolean equals(Object obj) {
-        if(!super.equals(obj))return false;
-        if(!(obj instanceof TerminalSymbol))return false;
-        TerminalSymbol ts = (TerminalSymbol)obj;
-        if(this.isNull() && ts.isNull())return true;
-        if(this.isNull() || ts.isNull())return false;
-        if(this.getName().equals("END") && ts.getName().equals("END"))return true;
+        if (!super.equals(obj)) return false;
+        if (!(obj instanceof TerminalSymbol)) return false;
+        TerminalSymbol ts = (TerminalSymbol) obj;
+        if (this.isNull() && ts.isNull()) return true;
+        if (this.isNull() || ts.isNull()) return false;
+        if (this.getName().equals("END") && ts.getName().equals("END")) return true;
         return ts.mToken.equals(this.mToken);
     }
 
@@ -34,8 +35,8 @@ public class TerminalSymbol extends Symbol{
 
     @Override
     public int hashCode() {
-        if(mToken==null) return super.hashCode();
-        return super.hashCode()^mToken.hashCode();
+        if (mToken == null) return super.hashCode();
+        return super.hashCode() ^ mToken.hashCode();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.compiler.principle.lab.controller;
 
 import com.compiler.principle.lab.logic.grammar.GrammarAnalyzer;
+import com.compiler.principle.lab.logic.grammar.GrammarResponse;
 import com.compiler.principle.lab.logic.grammar.SymbolTreeNode;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,7 @@ public class GrammarController {
     }
 
     @RequestMapping("/analyze")
-    public SymbolTreeNode analyze(@RequestBody Map<String, String> payload){
-        try{
-            return GrammarAnalyzer.analyze(payload.get("code"));
-        } catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+    public GrammarResponse analyze(@RequestBody Map<String, String> payload){
+        return GrammarAnalyzer.analyze(payload.get("code"));
     }
 }

@@ -9,7 +9,7 @@ public class MTable {
     public MTable(){
 
     }
-    private HashMap<Symbol,HashMap<TerminalSymbol,ArrayList<Production>>> map = new HashMap<>();
+    public HashMap<Symbol,HashMap<TerminalSymbol,ArrayList<Production>>> map = new HashMap<>();
     private Set<TerminalSymbol> mTerminalSymbols = new HashSet<>();
 
     public Set<TerminalSymbol> getTerminalSymbols() {

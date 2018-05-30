@@ -24,9 +24,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Token{" +
-                "mType='" + mType + '\'' +
-                '}';
+        return "Token{" + "mType='" + mType + '\'' + '}';
     }
 
     @Override

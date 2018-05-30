@@ -8,47 +8,6 @@ import java.util.*;
 
 public class LLParser {
 
-
-    public class ParserException extends Exception {
-        public ParserException() {
-        }
-
-        public ParserException(String message) {
-            super(message);
-        }
-
-        public ParserException(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public ParserException(Throwable cause) {
-            super(cause);
-        }
-
-        public ParserException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-            super(message, cause, enableSuppression, writableStackTrace);
-        }
-
-        private TokenItem mTokenItem;
-        private Symbol mSymbol;
-
-        public TokenItem getTokenItem() {
-            return mTokenItem;
-        }
-
-        public void setTokenItem(TokenItem tokenItem) {
-            mTokenItem = tokenItem;
-        }
-
-        public Symbol getSymbol() {
-            return mSymbol;
-        }
-
-        public void setSymbol(Symbol symbol) {
-            mSymbol = symbol;
-        }
-    }
-
     private List<Production> mProductions;
 
     private HashMap<Symbol, Boolean> mCanEmpty = new HashMap<>();
@@ -113,11 +72,11 @@ public class LLParser {
     }
 
     public SymbolTreeNode llParse(String sourceCode) throws ParserException {
-        try{
+        try {
             compileLexConfig();
             saveSourceFile(sourceCode);
-        } catch (Exception e){
-            throw new ParserException("ERROR: System error.");
+        } catch (Exception e) {
+            throw new ParserException("Unable to compile lex file.");
         }
 
         SymbolTreeNode head = new SymbolTreeNode(mStartSymbol);
