@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Lexical Analyzer</title>
+    <title>Grammar Analyzer</title>
     <link th:href="@{/lib/css/bootstrap.min.css}" rel="stylesheet">
     <script th:src="@{/lib/js/jquery-3.3.1.min.js}" type="application/javascript"></script>
 
     <style type="text/css" media="screen">
+
         .body-wrapper {
             width: 100%;
             height: 100%;
@@ -128,29 +129,14 @@
     <section class="main-editor">
         <div class="container">
             <div class="editor-wrapper">
-                <div id="editor">if(a==2) then {
-a$=a+1;
-}
-
-if(b!=2) then{
-b=b+1;
-}
-real c = 3.1415;
-int d = 6;
-real e = 3.14e-102; //This is comment.
-while(1) then{
-if(a<=b+c){
-b=c+b;
-}else {
-
-}
+                <div id="editor">{}
                 </div>
             </div>
             <!--editor-wrapper--!end-->
 
             <div class="editor-footer">
                 <div class="editor-footer-right">
-                    <button class="btn-blue" type="button" id="btn_submit" onclick="lex_analyze()"> Analyze</button>
+                    <button class="btn-blue" type="button" id="btn_submit" onclick="grammar_analyze()"> Analyze</button>
                 </div>
             </div>
 
@@ -192,73 +178,9 @@ b=c+b;
     editor.getSession().setMode("ace/mode/javascript");
     editor.session.setOption("useWorker", false);
 
-
     $(function () {
 
     });
-
-    // editor.setOptions({
-    //     enableBasicAutocompletion: true,
-    //     enableSnippets: true,
-    //     enableLiveAutocompletion: true
-    // });
-
-    function lex_analyze() {
-        var editor = ace.edit("editor");
-        var raw_code = editor.getValue();
-        $client.lex_analyze(raw_code, function (data) {
-            if (data) {
-
-                editor.session.removeMarker(marker_num);
-                editor.getSession().clearAnnotations();
-                var tokens = data.tokens;
-                fill_result_table(tokens);
-            }
-            if (data.error != null || data.error != "") {
-                {
-                    var error_msg = JSON.stringify(data.error).replace(/\\/gm, "");
-                    var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
-                    var position = error_msg.substring(error_msg.indexOf("position") + 9, error_msg.length - 2);
-                    console.log("error_msg: " + error_msg + "|" + "line_num" + line_num + "|" + "position" + position);
-                    if (data.tokens.length==0) {
-                        $(".result-table-wrapper").hide();
-                        $("tr").remove(".append");
-                    }
-                    error_mark(error_msg, line_num, position);
-                }
-
-            }
-        });
-    }
-
-    function fill_result_table(tokens) {
-        $(".result-table-wrapper").show();
-        var $table = $("#result_table");
-        $("tr").remove(".append");
-        for (var i = 0; i < tokens.length; i++) {
-            var $trTemp = $("<tr class='append'></tr>");
-            $trTemp.append("<th scope=\"row\">" + (i + 1) + "</th>");
-            $trTemp.append("<td>" + tokens[i].tokenType + "</td>");
-            $trTemp.append("<td>" + tokens[i].attributeValue + "</td>");
-            $trTemp.append("<td>" + tokens[i].lineNumber + "</td>");
-            $trTemp.append("<td>" + tokens[i].linePosition + "</td>");
-            $table.append($trTemp);
-            //$trTemp.appendTo($table);
-        }
-    }
-
-    function error_mark(err_msg, line, position) {
-        var Range = require("ace/range").Range;
-        marker_num = editor.session.addMarker(new Range(line, 0, line, 1), 'ace_highlight-marker', 'fullLine');
-        console.log("marker_num" + marker_num);
-        editor.session.setOption("useWorker", false);
-        editor.getSession().setAnnotations([{
-            row: line,
-            column: 0,
-            text: err_msg,
-            type: "error",
-        }]);
-    }
 
 </script>
 </body>

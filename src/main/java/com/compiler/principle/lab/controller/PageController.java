@@ -11,7 +11,7 @@ public class PageController {
         return "lexpage";
     }
 
-    @RequestMapping("/grammar")
+    @RequestMapping("/grammarpage")
     public String getGrammarPage() {
         return "grammarpage";
     }
