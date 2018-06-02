@@ -2,7 +2,6 @@ package com.compiler.principle.lab.controller;
 
 import com.compiler.principle.lab.logic.grammar.GrammarAnalyzer;
 import com.compiler.principle.lab.logic.grammar.GrammarResponse;
-import com.compiler.principle.lab.logic.grammar.SymbolTreeNode;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
