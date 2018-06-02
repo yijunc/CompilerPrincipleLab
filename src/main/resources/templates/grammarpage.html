@@ -129,7 +129,7 @@
     <section class="main-editor">
         <div class="container">
             <div class="editor-wrapper">
-                <div id="editor">{}
+                <div id="editor">a=4;
                 </div>
             </div>
             <!--editor-wrapper--!end-->
@@ -169,7 +169,7 @@
     </section>
 </div>
 <script src="https://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
-<script th:src="@{/js/lex.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/cClient.js}" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript">
     var editor = ace.edit("editor");
@@ -181,6 +181,35 @@
     $(function () {
 
     });
+
+    function grammar_analyze() {
+        var editor = ace.edit("editor");
+        var raw_code = editor.getValue();
+        $client.grammar_analyze(raw_code, function (data) {
+            if (data) {
+                editor.session.removeMarker(marker_num);
+                editor.getSession().clearAnnotations();
+                var symbols = data.symbols;
+                alert(symbols);
+                // fill_result_table(tokens);
+            }
+            if (data.error != null || data.error != "") {
+                {
+                    var error_msg = JSON.stringify(data.error).replace(/\\/gm, "");
+                    var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
+                    var position = error_msg.substring(error_msg.indexOf("position") + 9, error_msg.length - 2);
+                    console.log("error_msg: " + error_msg + "|" + "line_num" + line_num + "|" + "position" + position);
+                    if (data.tokens.length==0) {
+                        $(".result-table-wrapper").hide();
+                        $("tr").remove(".append");
+                    }
+                    error_mark(error_msg, line_num, position);
+                }
+
+            }
+        });
+    }
+
 
 </script>
 </body>
