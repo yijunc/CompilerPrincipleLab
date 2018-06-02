@@ -1,6 +1,4 @@
 package com.compiler.principle.lab.logic.grammar;
-
-import org.springframework.util.AutoPopulatingList;
 import org.springframework.util.ResourceUtils;
 
 import java.util.*;
@@ -60,19 +58,18 @@ public class GrammarAnalyzer {
         ret.setSymbols(SRet);
         ret.setParsingTable(PRet);
         System.out.println("Parsing table done.");
-        first(parser, "program");
         long startTime = System.currentTimeMillis();
         try {
             ret.setGrammaTree(parser.llParse(sourceCode));
         } catch (ParserException e) {
+            if(e.getMessage().equals("Syntax error.")){
+                ret.setErrorSymbol(e.getSymbol());
+                ret.setErrorTokenItem(e.getTokenItem());
+            }
             ret.setError(e.getMessage());
         }
         long endTime = System.currentTimeMillis();
         ret.setStatus(String.valueOf(endTime - startTime) + "ms");
         return ret;
-    }
-
-    private static void first(LLParser parser, String m) {
-        parser.first(new Symbol(m));
     }
 }

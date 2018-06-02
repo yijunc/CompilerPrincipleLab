@@ -10,6 +10,24 @@ public class GrammarResponse {
     private SymbolTreeNode grammaTree;
     private String status;
     private String error;
+    private Symbol errorSymbol;
+    private TokenItem errorTokenItem;
+
+    public Symbol getErrorSymbol() {
+        return errorSymbol;
+    }
+
+    public void setErrorSymbol(Symbol errorSymbol) {
+        this.errorSymbol = errorSymbol;
+    }
+
+    public TokenItem getErrorTokenItem() {
+        return errorTokenItem;
+    }
+
+    public void setErrorTokenItem(TokenItem errorTokenItem) {
+        this.errorTokenItem = errorTokenItem;
+    }
 
     public GrammarResponse() {
     }

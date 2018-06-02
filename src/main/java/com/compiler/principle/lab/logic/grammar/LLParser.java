@@ -97,7 +97,7 @@ public class LLParser {
     private int recurGenerateTree(SymbolTreeNode head, List<TerminalSymbol> list, List<TokenItem> tokenItems, int index) throws ParserException {
         Symbol symbol = head.getHead();
         if (index >= list.size()) {
-            ParserException pe = new ParserException("ERROR: Syntax error.");
+            ParserException pe = new ParserException("Syntax error.");
             pe.setTokenItem(tokenItems.get(index));
             pe.setSymbol(symbol);
             throw pe;
@@ -106,7 +106,7 @@ public class LLParser {
         if (symbol instanceof TerminalSymbol) {
             if (symbol.equals(NULL_SYMBOL)) return 0;
             if (!symbol.equals(terminalSymbol)) {
-                ParserException pe = new ParserException("ERROR: Syntax error. ");
+                ParserException pe = new ParserException("Syntax error. ");
                 pe.setSymbol(symbol);
                 pe.setTokenItem(tokenItems.get(index));
                 throw pe;
@@ -115,7 +115,7 @@ public class LLParser {
         }
         ArrayList<Production> productions = mMTable.get(symbol, terminalSymbol);
         if (productions.size() != 1) {
-            ParserException pe = new ParserException("ERROR: Syntax error.");
+            ParserException pe = new ParserException("Syntax error.");
             pe.setTokenItem(tokenItems.get(index));
             pe.setSymbol(symbol);
             throw pe;
