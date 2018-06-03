@@ -10,6 +10,7 @@
         .body-wrapper {
             width: 100%;
             height: 100%;
+            background: #F2F5FA;
         }
 
         .main-wrapper {
@@ -24,7 +25,6 @@
 
         section > .container {
             position: relative;
-            background: #fff;
             width: 100%;
             /*min-height: 400px;
             max-height: 800px;
@@ -67,6 +67,7 @@
         }
 
         .editor-footer {
+            background: white;
             width: 100%;
             overflow: hidden;
             /*background: #fff;*/
@@ -83,20 +84,21 @@
         }
 
         .editor-footer button {
-            background-color: dodgerblue;
-            color: white;
+            background-color: white;
+            color: #3769C5;
             text-align: center;
             margin: 10px;
-            padding: 12px;
+            padding: 10px;
             text-decoration: none;
-            font-size: 18px;
-            line-height: 16px;
+            font-size: 14px;
+            line-height: 10px;
+            border: 1px solid #3769C5;
             border-radius: 4px;
         }
 
         .editor-footer button:hover {
-            background-color: #ddd;
-            color: dodgerblue;
+            background-color: #3769C5;
+            color: white;
         }
 
         .result-table-wrapper {
@@ -129,21 +131,21 @@
         <div class="container">
             <div class="editor-wrapper">
                 <div id="editor">if(a==2) then {
-a$=a+1;
-}
+                    a$=a+1;
+                    }
 
-if(b!=2) then{
-b=b+1;
-}
-real c = 3.1415;
-int d = 6;
-real e = 3.14e-102; //This is comment.
-while(1) then{
-if(a<=b+c){
-b=c+b;
-}else {
+                    if(b!=2) then{
+                    b=b+1;
+                    }
+                    real c = 3.1415;
+                    int d = 6;
+                    real e = 3.14e-102; //This is comment.
+                    while(1) then{
+                    if(a<=b+c){
+                    b=c+b;
+                    }else {
 
-}
+                    }
                 </div>
             </div>
             <!--editor-wrapper--!end-->
@@ -214,13 +216,13 @@ b=c+b;
                 var tokens = data.tokens;
                 fill_result_table(tokens);
             }
-            if (data.error != null || data.error != "") {
+            if (data.error != null && data.error != "") {
                 {
                     var error_msg = JSON.stringify(data.error).replace(/\\/gm, "");
                     var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
                     var position = error_msg.substring(error_msg.indexOf("position") + 9, error_msg.length - 2);
                     console.log("error_msg: " + error_msg + "|" + "line_num" + line_num + "|" + "position" + position);
-                    if (data.tokens.length==0) {
+                    if (data.tokens.length == 0) {
                         $(".result-table-wrapper").hide();
                         $("tr").remove(".append");
                     }

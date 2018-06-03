@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:href="@{/lib/css/bootstrap.min.css}" rel="stylesheet">
     <script th:src="@{/lib/js/jquery-3.3.1.min.js}" type="application/javascript"></script>
     <style type="text/css" media="screen">
         .body-wrapper {
@@ -16,35 +17,52 @@
 
         .header {
             overflow: hidden;
-            background-color: #f1f1f1;
-            padding: 20px 10px;
+            background-color: white;
+            padding: 0;
+            border-bottom: 1px solid rgba(0, 40, 100, 0.12);
         }
 
         .header a {
             float: left;
-            color: black;
+            color: #393939;
             text-align: center;
             padding: 12px;
             text-decoration: none;
-            font-size: 18px;
-            line-height: 25px;
+            line-height: 1.5em;
             border-radius: 4px;
-            margin: 7px;
+            margin-left: 40px;
         }
 
         .header a.logo {
-            font-size: 25px;
+            font-size: 20px;
             font-weight: bold;
         }
 
         .header a:hover {
-            background-color: #ddd;
-            color: black;
+            opacity: 0.5;
         }
 
-        .header a.active {
-            background-color: dodgerblue;
-            color: white;
+        /*.header a.active {*/
+            /*background-color: dodgerblue;*/
+            /*color: white;*/
+        /*}*/
+
+        .header-brand-img{
+            height: 3rem;
+            line-height: 2rem;
+            vertical-align: bottom;
+            margin-left: 10px;
+            padding-right: 10px;
+            width: auto;
+            border-bottom-left-radius: 20px;
+            border-top-left-radius: 20px;
+        }
+
+        .header .container{
+        }
+
+        .header-left {
+            float: left;
         }
 
         .header-right {
@@ -63,30 +81,102 @@
                 float: none;
             }
         }
+
+        .icon-image{
+            height: 1.5rem;
+            line-height: 2rem;
+            vertical-align: center;
+            padding-right: 5px;
+            width: auto;
+
+        }
+
+        .nav-tabs{
+            border-bottom: 1px solid transparent;
+        }
+        .nav-item{
+            margin-right: 30px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .nav-tabs>li>a{
+            color: #9096A2;
+            padding-right: 0px;
+            padding-left: 0px;
+            padding-bottom: 1.2rem;
+            margin-left: 0px;
+        }
+
+        .nav-tabs>li>a:hover{
+            background: white;
+            opacity: 1;
+            color: #3769C5;
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 1px solid #3769C5;
+        }
+
+        .nav-tabs>li>a:visited{
+            background: white;
+        }
+
+        .nav-tabs>li>a.c-active{
+            color: #3769C5;
+            border-bottom: 1px solid #3769C5;
+        }
+
         </style>
 </head>
 <body>
 <header id="pageTop" class="header">
-    <a href="#default" class="logo">Compiler</a>
-    <div class="header-right">
-        <a class="home" href="#">Home</a>
-        <a class="lexical" href="/lexpage" >Lexical Analyzer</a>
-        <a class="grammar" href="/grammarpage">Parsing</a>
+    <a href="#default" class="logo">
+        <img th:src="@{/src/logo1.png}" class="header-brand-img" alt="compiler logo">
+        Compiler
+    </a>
     </div>
 </header>
+<div class="header">
+    <div class="container">
+        <div class="header-left">
+            <div class="col-lg order-lg-first">
+                <ul class="nav nav-tabs ">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link home">
+                            <img th:src="@{/src/icon_home.png}" class="icon-image">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/lexpage" class="nav-link lexical" ><img th:src="@{/src/icon2.png}" class="icon-image">Lexical</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="/grammarpage" class="nav-link grammar"><img th:src="@{/src/icon3.png}" class="icon-image">Parsing</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="header-right">-->
+    <!--<a class="home" href="#">Home</a>-->
+    <!--<a class="lexical" href="/lexpage" >Lexical Analyzer</a>-->
+    <!--<a class="grammar" href="/grammarpage">Parsing</a>-->
+<!--</div>-->
+<!--<div class="line">-->
+
 <script type="text/javascript">
     $(function () {
         if($(document).attr("title")=="Lexical Analyzer"){
-            $("a.active").removeClass("active");
-            $("a.lexical").addClass("active");
+            $("a.c-active").removeClass("c-active");
+            $("a.lexical").addClass("c-active");
         }
         else if($(document).attr("title")=="Grammar Analyzer"){
-            $("a.active").removeClass("active");
-            $("a.grammar").addClass("active");
+            $("a.c-active").removeClass("c-active");
+            $("a.grammar").addClass("c-active");
         }
         else {
-            $("a.active").removeClass("active");
-            $("a.home").addClass("active");
+            $("a.c-active").removeClass("c-active");
+            $("a.home").addClass("c-active");
         }
     });
 </script>
