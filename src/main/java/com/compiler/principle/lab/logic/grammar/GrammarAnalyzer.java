@@ -1,4 +1,5 @@
 package com.compiler.principle.lab.logic.grammar;
+
 import org.springframework.util.ResourceUtils;
 
 import java.util.*;
@@ -36,20 +37,20 @@ public class GrammarAnalyzer {
             SRet.add(it.getName());
         }
         HashMap<String, HashMap<String, String>> PRet = new HashMap<>();
-        HashMap<Symbol, HashMap<TerminalSymbol, ArrayList<Production>>> table = parser.getMTable().map;
         for (Symbol it : symbols) {
-            HashMap<TerminalSymbol, ArrayList<Production>> symbolToProduction = table.get(it);
             HashMap<String, String> TPTmp = new HashMap<>();
             for (TerminalSymbol tit : terminalSymbols) {
-                if (symbolToProduction.get(tit) == null || symbolToProduction.get(tit).size() == 0) {
+                ArrayList<Production> prods = parser.getMTable().get(it, tit);
+                if(prods.size() != 1){
                     continue;
                 }
-                Production production = symbolToProduction.get(tit).get(0);
+                Production prod = prods.get(0);
                 String rightSide = "";
-                for (int i = 0; i < production.getRight().size(); i++) {
-                    rightSide = rightSide.concat(production.getRight().get(i).getName()) + " ";
+                for (int i = 0; i < prod.getRight().size(); i++) {
+                    rightSide = rightSide.concat(prod.getRight().get(i).getName().equals("NULL") ?
+                            "ε" : prod.getRight().get(i).getName()) + " ";
                 }
-                TPTmp.put(tit.getToken().getType(), production.getLeft().getName() + "->" + rightSide);
+                TPTmp.put(tit.getToken().getType(), prod.getLeft().getName() + " -> " + rightSide);
             }
             PRet.put(it.getName(), TPTmp);
         }
@@ -64,12 +65,11 @@ public class GrammarAnalyzer {
             ret.setGrammaTree(parser.llParse(sourceCode));
         } catch (ParserException e) {
             hasError = true;
-            if(e.getMessage().equals("Syntax error.")){
+            if (e.getMessage().equals("Syntax error.")) {
                 ret.setStatus("Syntax error.");
                 ret.setErrorSymbol(e.getSymbol());
                 ret.setErrorTokenItem(e.getTokenItem());
-            }
-            else{
+            } else {
                 ret.setStatus("Lex error.");
                 ret.setError(e.getMessage());
             }
