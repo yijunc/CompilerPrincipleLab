@@ -81,7 +81,15 @@ public class LLParser {
 
         SymbolTreeNode head = new SymbolTreeNode(mStartSymbol);
         LexAnalyser analyser = new LexAnalyser(lexSrcFile, sourceFile);
-        List<TokenItem> tokenItems = analyser.analyse();
+        List<TokenItem> tokenItems;
+        try{
+             tokenItems = analyser.analyse();
+        } catch (Exception e){
+            throw new ParserException("Unable to analyze lex.");
+        }
+        if(analyser.hasError()){
+            throw new ParserException(analyser.getErrorMessage());
+        }
 
         List<TerminalSymbol> symbols = new ArrayList<>();
         tokenItems.stream().map(t -> new TerminalSymbol(t.getToken().getType(), t.getToken())).forEach(symbols::add);

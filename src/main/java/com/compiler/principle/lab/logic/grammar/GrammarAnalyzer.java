@@ -23,7 +23,7 @@ public class GrammarAnalyzer {
         System.out.println("Productions read.");
         System.out.println("Generating parsing table...");
         LLParser parser = new LLParser(productions, factory.getStartSymbol());
-        System.out.println(parser.getMTable());
+        //System.out.println(parser.getMTable());
         System.out.println("Preparing parsing table json...");
         List<TerminalSymbol> terminalSymbols = new ArrayList<>(parser.getMTable().getTerminalSymbols());
         List<String> TSRet = new ArrayList<>();
@@ -58,18 +58,24 @@ public class GrammarAnalyzer {
         ret.setSymbols(SRet);
         ret.setParsingTable(PRet);
         System.out.println("Parsing table done.");
+        boolean hasError = false;
         long startTime = System.currentTimeMillis();
         try {
             ret.setGrammaTree(parser.llParse(sourceCode));
         } catch (ParserException e) {
+            hasError = true;
             if(e.getMessage().equals("Syntax error.")){
+                ret.setStatus("Syntax error.");
                 ret.setErrorSymbol(e.getSymbol());
                 ret.setErrorTokenItem(e.getTokenItem());
             }
-            ret.setError(e.getMessage());
+            else{
+                ret.setStatus("Lex error.");
+                ret.setError(e.getMessage());
+            }
         }
         long endTime = System.currentTimeMillis();
-        ret.setStatus(String.valueOf(endTime - startTime) + "ms");
+        if (!hasError) ret.setStatus(String.valueOf(endTime - startTime) + "ms");
         return ret;
     }
 }

@@ -23,6 +23,22 @@ public class ParserException extends Exception {
     private TokenItem mTokenItem;
     private Symbol mSymbol;
 
+    public TokenItem getmTokenItem() {
+        return mTokenItem;
+    }
+
+    public void setmTokenItem(TokenItem mTokenItem) {
+        this.mTokenItem = mTokenItem;
+    }
+
+    public Symbol getmSymbol() {
+        return mSymbol;
+    }
+
+    public void setmSymbol(Symbol mSymbol) {
+        this.mSymbol = mSymbol;
+    }
+
     public TokenItem getTokenItem() {
         return mTokenItem;
     }
