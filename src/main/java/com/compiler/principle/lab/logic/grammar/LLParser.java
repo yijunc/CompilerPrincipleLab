@@ -94,6 +94,8 @@ public class LLParser {
         List<TerminalSymbol> symbols = new ArrayList<>();
         tokenItems.stream().map(t -> new TerminalSymbol(t.getToken().getType(), t.getToken())).forEach(symbols::add);
         symbols.add(END_SYMBOL);
+        TokenItem last = tokenItems.get(tokenItems.size()-1);
+        tokenItems.add(new TokenItem(new Token("END"),"END",last.getColumn(),last.getRow()));
         if (analyser.hasError()) {
             mLexError = analyser.getErrorMessage();
             mLexHasError = true;
