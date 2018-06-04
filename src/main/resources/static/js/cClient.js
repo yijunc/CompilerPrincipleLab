@@ -21,7 +21,7 @@
 
         $.ajax({
             url: config.server + config.apiGate + moduleName + "/" + methodName,
-            timeout: 10000,
+            // timeout: 10000,
             type:"post",
             method: 'post',
             dataType: "json",
