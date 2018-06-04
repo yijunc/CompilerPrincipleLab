@@ -7,7 +7,7 @@ public class GrammarResponse {
     private List<String> symbols;
     private List<String> terminalSymbols;
     private HashMap<String, HashMap<String , String>> parsingTable;
-    private SymbolTreeNode grammaTree;
+    private SymbolTreeNode grammarTree;
     private String status;
     private String error;
     private Symbol errorSymbol;
@@ -56,12 +56,12 @@ public class GrammarResponse {
         this.parsingTable = parsingTable;
     }
 
-    public SymbolTreeNode getGrammaTree() {
-        return grammaTree;
+    public SymbolTreeNode getGrammarTree() {
+        return grammarTree;
     }
 
-    public void setGrammaTree(SymbolTreeNode grammaTree) {
-        this.grammaTree = grammaTree;
+    public void setGrammarTree(SymbolTreeNode grammarTree) {
+        this.grammarTree = grammarTree;
     }
 
     public String getStatus() {

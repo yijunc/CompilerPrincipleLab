@@ -62,7 +62,7 @@ public class GrammarAnalyzer {
         boolean hasError = false;
         long startTime = System.currentTimeMillis();
         try {
-            ret.setGrammaTree(parser.llParse(sourceCode));
+            ret.setGrammarTree(parser.llParse(sourceCode));
         } catch (ParserException e) {
             hasError = true;
             if (e.getMessage().equals("Syntax error.")) {
