@@ -351,14 +351,9 @@
             var parsingTable = data.parsingTable;
             fill_parsing_table(symbols, terminalSymbols, parsingTable);
 
-            if ( data.grammarTree != null && data.grammarTree != '') {
-                console.log(data.grammarTree);
-                $(".main-tree").show();
-                var grammarTree = data.grammarTree;
-                draw_tree(grammarTree);
-            }
             console.log("data.status: " + data.status);
             if (data.status == "Lex error.") {
+                console.log("grammarTree:"+data.grammarTree);
                 $(".main-tree").hide();
                 var error_msg = data.status + "! " + JSON.stringify(data.error).replace(/\\/gm, "");
                 var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
@@ -375,6 +370,11 @@
                 console.log("error_msg: " + error_msg + "|" + "line_num: " + line_num + "|" + "position1: " + position1 + "|" + "position2: " + position2);
                 var error_msg = data.status + "! " + "Unexpected character " + token + " in line " + line_num + " column " + position1 + ".";
                 error_mark(error_msg, line_num, position1, position2);
+            }
+            else {
+                $(".main-tree").show();
+                var grammarTree = data.grammarTree;
+                draw_tree(grammarTree);
             }
         });
     }
