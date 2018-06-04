@@ -2,8 +2,8 @@
 
     var c = {}; //code
     var config = {
-        server: 'http://localhost:8080/',
-        apiGate: ''
+        server: 'http://47.100.228.168:8080/',
+        apiGate: 'compilerlab/'
     };
 
     c.lex_analyze = function (raw_code, func) {
@@ -21,7 +21,7 @@
 
         $.ajax({
             url: config.server + config.apiGate + moduleName + "/" + methodName,
-            timeout: 10000,
+            // timeout: 10000,
             type:"post",
             method: 'post',
             dataType: "json",
