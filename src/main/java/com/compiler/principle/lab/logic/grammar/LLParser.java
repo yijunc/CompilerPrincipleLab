@@ -95,7 +95,7 @@ public class LLParser {
         tokenItems.stream().map(t -> new TerminalSymbol(t.getToken().getType(), t.getToken())).forEach(symbols::add);
         symbols.add(END_SYMBOL);
         TokenItem last = tokenItems.get(tokenItems.size()-1);
-        tokenItems.add(new TokenItem(new Token("END"),"END",last.getColumn(),last.getRow()));
+        tokenItems.add(new TokenItem(new Token("END"),"END",last.getRow(),last.getColumn()));
         if (analyser.hasError()) {
             mLexError = analyser.getErrorMessage();
             mLexHasError = true;
@@ -116,7 +116,7 @@ public class LLParser {
         if (symbol instanceof TerminalSymbol) {
             if (symbol.equals(NULL_SYMBOL)) return 0;
             if (!symbol.equals(terminalSymbol)) {
-                ParserException pe = new ParserException("Syntax error. ");
+                ParserException pe = new ParserException("Syntax error.");
                 pe.setSymbol(symbol);
                 pe.setTokenItem(tokenItems.get(index));
                 throw pe;
@@ -131,6 +131,10 @@ public class LLParser {
             throw pe;
         }
         Production production = productions.get(0);
+        if(symbol.equals(mStartSymbol)){
+            production = production.copy();
+            production.getRight().add(END_SYMBOL);
+        }
         List<Symbol> rightSymbols = production.getRight();
         for (Symbol s : rightSymbols) {
             SymbolTreeNode stn = new SymbolTreeNode(s);

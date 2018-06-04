@@ -2,6 +2,7 @@ package com.compiler.principle.lab.logic.grammar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Production {
@@ -64,6 +65,12 @@ public class Production {
         int result = mLeft != null ? mLeft.hashCode() : 0;
         result = 31 * result + (mRight != null ? mRight.hashCode() : 0);
         return result;
+    }
+
+    public Production copy(){
+        List<Symbol> copy = new ArrayList<>();
+        copy.addAll(mRight);
+        return new Production(mLeft,copy);
     }
 
     @Override
