@@ -346,14 +346,14 @@
         editor.session.removeMarker(marker_num);
         editor.getSession().clearAnnotations();
         $client.grammar_analyze(raw_code, function (data) {
-            if (data.grammaTree != null && data.grammaTree != '') {
+            if (data.grammarTree != null && data.grammarTree != '') {
                 $(".main-tree").show();
                 var symbols = data.symbols;
                 var terminalSymbols = data.terminalSymbols;
                 var parsingTable = data.parsingTable;
                 fill_parsing_table(symbols, terminalSymbols, parsingTable);
 
-                var grammarTree = data.grammaTree;
+                var grammarTree = data.grammarTree;
                 draw_tree(grammarTree);
             }
             console.log("data.status: " + data.status);
