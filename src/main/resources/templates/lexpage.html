@@ -219,7 +219,6 @@
                 fill_result_table(tokens);
             }
             if (data.error != null && data.error != "") {
-                {
                     var error_msg = JSON.stringify(data.error).replace(/\\/gm, "");
                     var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
                     var position = error_msg.substring(error_msg.indexOf("position") + 9, error_msg.length - 2);
@@ -229,8 +228,6 @@
                         $("tr").remove(".append");
                     }
                     error_mark(error_msg, line_num, position);
-                }
-
             }
         });
     }
