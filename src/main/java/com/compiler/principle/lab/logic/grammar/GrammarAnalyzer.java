@@ -1,4 +1,5 @@
 package com.compiler.principle.lab.logic.grammar;
+
 import org.springframework.util.ResourceUtils;
 
 import java.util.*;
@@ -23,7 +24,7 @@ public class GrammarAnalyzer {
         System.out.println("Productions read.");
         System.out.println("Generating parsing table...");
         LLParser parser = new LLParser(productions, factory.getStartSymbol());
-        System.out.println(parser.getMTable());
+        //System.out.println(parser.getMTable());
         System.out.println("Preparing parsing table json...");
         List<TerminalSymbol> terminalSymbols = new ArrayList<>(parser.getMTable().getTerminalSymbols());
         List<String> TSRet = new ArrayList<>();
@@ -36,20 +37,20 @@ public class GrammarAnalyzer {
             SRet.add(it.getName());
         }
         HashMap<String, HashMap<String, String>> PRet = new HashMap<>();
-        HashMap<Symbol, HashMap<TerminalSymbol, ArrayList<Production>>> table = parser.getMTable().map;
         for (Symbol it : symbols) {
-            HashMap<TerminalSymbol, ArrayList<Production>> symbolToProduction = table.get(it);
             HashMap<String, String> TPTmp = new HashMap<>();
             for (TerminalSymbol tit : terminalSymbols) {
-                if (symbolToProduction.get(tit) == null || symbolToProduction.get(tit).size() == 0) {
+                ArrayList<Production> prods = parser.getMTable().get(it, tit);
+                if(prods.size() != 1){
                     continue;
                 }
-                Production production = symbolToProduction.get(tit).get(0);
+                Production prod = prods.get(0);
                 String rightSide = "";
-                for (int i = 0; i < production.getRight().size(); i++) {
-                    rightSide = rightSide.concat(production.getRight().get(i).getName()) + " ";
+                for (int i = 0; i < prod.getRight().size(); i++) {
+                    rightSide = rightSide.concat(prod.getRight().get(i).getName().equals("NULL") ?
+                            "ε" : prod.getRight().get(i).getName()) + " ";
                 }
-                TPTmp.put(tit.getToken().getType(), production.getLeft().getName() + "->" + rightSide);
+                TPTmp.put(tit.getToken().getType(), prod.getLeft().getName() + " -> " + rightSide);
             }
             PRet.put(it.getName(), TPTmp);
         }
@@ -58,18 +59,23 @@ public class GrammarAnalyzer {
         ret.setSymbols(SRet);
         ret.setParsingTable(PRet);
         System.out.println("Parsing table done.");
+        boolean hasError = false;
         long startTime = System.currentTimeMillis();
         try {
             ret.setGrammaTree(parser.llParse(sourceCode));
         } catch (ParserException e) {
-            if(e.getMessage().equals("Syntax error.")){
+            hasError = true;
+            if (e.getMessage().equals("Syntax error.")) {
+                ret.setStatus("Syntax error.");
                 ret.setErrorSymbol(e.getSymbol());
                 ret.setErrorTokenItem(e.getTokenItem());
+            } else {
+                ret.setStatus("Lex error.");
+                ret.setError(e.getMessage());
             }
-            ret.setError(e.getMessage());
         }
         long endTime = System.currentTimeMillis();
-        ret.setStatus(String.valueOf(endTime - startTime) + "ms");
+        if (!hasError) ret.setStatus(String.valueOf(endTime - startTime) + "ms");
         return ret;
     }
 }

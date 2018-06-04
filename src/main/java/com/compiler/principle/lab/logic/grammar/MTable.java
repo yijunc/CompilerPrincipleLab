@@ -9,8 +9,24 @@ public class MTable {
     public MTable(){
 
     }
-    public HashMap<Symbol,HashMap<TerminalSymbol,ArrayList<Production>>> map = new HashMap<>();
+    private HashMap<Symbol,HashMap<TerminalSymbol,ArrayList<Production>>> map = new HashMap<>();
     private Set<TerminalSymbol> mTerminalSymbols = new HashSet<>();
+
+    public HashMap<Symbol, HashMap<TerminalSymbol, ArrayList<Production>>> getMap() {
+        return map;
+    }
+
+    public void setMap(HashMap<Symbol, HashMap<TerminalSymbol, ArrayList<Production>>> map) {
+        this.map = map;
+    }
+
+    public Set<TerminalSymbol> getmTerminalSymbols() {
+        return mTerminalSymbols;
+    }
+
+    public void setmTerminalSymbols(Set<TerminalSymbol> mTerminalSymbols) {
+        this.mTerminalSymbols = mTerminalSymbols;
+    }
 
     public Set<TerminalSymbol> getTerminalSymbols() {
         return mTerminalSymbols;
