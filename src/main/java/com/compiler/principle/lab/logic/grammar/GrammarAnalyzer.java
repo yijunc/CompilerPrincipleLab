@@ -50,7 +50,7 @@ public class GrammarAnalyzer {
                     rightSide = rightSide.concat(prod.getRight().get(i).getName().equals("NULL") ?
                             "ε" : prod.getRight().get(i).getName()) + " ";
                 }
-                TPTmp.put(tit.getToken().getType(), prod.getLeft().getName() + " -> " + rightSide);
+                TPTmp.put(tit.getToken().getType(), prod.getLeft().getName() + " → " + rightSide);
             }
             PRet.put(it.getName(), TPTmp);
         }
