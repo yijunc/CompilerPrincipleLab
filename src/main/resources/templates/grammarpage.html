@@ -133,7 +133,7 @@
         }
 
         .table-cha-shadow {
-            box-shadow: 2px 1px 3px #888888
+            box-shadow: 2px 2px 3px #888888
         }
 
         .main-table > .container-fluid {
@@ -453,6 +453,9 @@
         }
         else if (head.name == 'NUM' || head.name == "ID") {
             headName = head.name + "    -     " + grammarTree.value;
+        }
+        else if(head.name == 'END'){
+            return;
         }
         else {
             headName = head.name;
