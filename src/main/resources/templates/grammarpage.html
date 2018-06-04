@@ -158,10 +158,12 @@
 
         #left_div1 {
             width: 100%;
+            overflow: hidden;
         }
 
         #left_div2 {
             margin-top: -20px;
+            padding-top: 1px;
             width: 100%;
             height: 400px;
             overflow: hidden;
@@ -393,9 +395,9 @@
             document.getElementById("right_div1").scrollLeft = right_div2_left;
         }
         //设置右边div宽度
-        document.getElementById("right_div").style.width = "" + document.documentElement.clientWidth - 243 + "px";
+        document.getElementById("right_div").style.width = "" + document.documentElement.clientWidth - 213 + "px";
         setInterval(function () {
-            document.getElementById("right_div").style.width = "" + document.documentElement.clientWidth - 243 + "px";
+            document.getElementById("right_div").style.width = "" + document.documentElement.clientWidth - 213 + "px";
         }, 0);
 
         var $thead = $(".sybols-head");

@@ -2,10 +2,10 @@
 
     var c = {}; //code
     var config = {
-        server: 'http://47.100.228.168:8080/',
-        apiGate: 'compilerlab/'
-        // server: 'http://localhost:8080/',
-        // apiGate: ''
+        // server: 'http://47.100.228.168:8080/',
+        // apiGate: 'compilerlab/'
+        server: 'http://localhost:8080/',
+        apiGate: ''
     };
 
     c.lex_analyze = function (raw_code, func) {
