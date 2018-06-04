@@ -271,7 +271,6 @@
             <div class="editor-footer">
                 <div class="editor-footer-right">
                     <button class="btn-blue" type="button" id="btn_submit" onclick="grammar_analyze()"> Analyze</button>
-                    <button class="btn-blue" type="button" id="btn_test" onclick="draw_tree()"> test</button>
                 </div>
             </div>
 
@@ -326,7 +325,7 @@
     </div>
 </section>
 
-<div class="main-tree">
+<div class="main-tree" style="display: none">
     <div id="tree"></div>
 </div>
 
@@ -344,10 +343,11 @@
     function grammar_analyze() {
         var editor = ace.edit("editor");
         var raw_code = editor.getValue();
+        editor.session.removeMarker(marker_num);
+        editor.getSession().clearAnnotations();
         $client.grammar_analyze(raw_code, function (data) {
-            if (data) {
-                editor.session.removeMarker(marker_num);
-                editor.getSession().clearAnnotations();
+            if (data.grammaTree != null && data.grammaTree != '') {
+                $(".main-tree").show();
                 var symbols = data.symbols;
                 var terminalSymbols = data.terminalSymbols;
                 var parsingTable = data.parsingTable;
@@ -356,12 +356,24 @@
                 var grammarTree = data.grammaTree;
                 draw_tree(grammarTree);
             }
-            if (data.error != null && data.error != "") {
-                {
-                    var error_msg = JSON.stringify(data.error);
-                    alert(error_msg);
-                }
-
+            console.log("data.status: " + data.status);
+            if (data.status == "Lex error.") {
+                $(".main-tree").hide();
+                var error_msg = data.status + "! " + JSON.stringify(data.error).replace(/\\/gm, "");
+                var line_num = error_msg.substring(error_msg.indexOf("line") + 5, error_msg.indexOf(", position"));
+                var position = error_msg.substring(error_msg.indexOf("position") + 9, error_msg.length - 2);
+                console.log("error_msg: " + error_msg + "|" + "line_num" + line_num + "|" + "position: " + position);
+                error_mark(error_msg, line_num, 0, 0);
+            }
+            else if (data.status == "Syntax error.") {
+                $(".main-tree").hide();
+                var token = JSON.stringify(data.errorTokenItem.token.type);
+                var line_num = JSON.stringify(data.errorTokenItem.row);
+                var position1 = JSON.stringify(data.errorTokenItem.column);
+                var position2 = parseInt(JSON.stringify(data.errorTokenItem.column)) + token.length;
+                console.log("error_msg: " + error_msg + "|" + "line_num: " + line_num + "|" + "position1: " + position1 + "|" + "position2: " + position2);
+                var error_msg = data.status + "! " + "Unexpected character " + token + " in line " + line_num + " column " + position1 + ".";
+                error_mark(error_msg, line_num, position1, position2);
             }
         });
     }
@@ -453,6 +465,23 @@
             sub_tree.nodes[i] = read_tree_json(kids[i]);
         }
         return sub_tree;
+    }
+
+    function error_mark(err_msg, line, position1, position2) {
+        var Range = require("ace/range").Range;
+        if (position1 == 0 && position2 == 0) {
+            marker_num = editor.session.addMarker(new Range(line, 0, line, 1), 'ace_highlight-marker', 'fullLine');
+        } else {
+            marker_num = editor.session.addMarker(new Range(line, position1, line, position2), 'ace_highlight-marker', 'fullLine');
+        }
+        console.log("marker_num: " + marker_num);
+        editor.session.setOption("useWorker", false);
+        editor.getSession().setAnnotations([{
+            row: line,
+            column: 0,
+            text: err_msg,
+            type: "error",
+        }]);
     }
 </script>
 </body>
