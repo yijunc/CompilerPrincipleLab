@@ -370,7 +370,7 @@
                 var position1 = JSON.stringify(data.errorTokenItem.column);
                 var position2 = parseInt(JSON.stringify(data.errorTokenItem.column)) + token.length;
                 console.log("error_msg: " + error_msg + "|" + "line_num: " + line_num + "|" + "position1: " + position1 + "|" + "position2: " + position2);
-                var error_msg = data.status + "! " + "Unexpected character " + token + " in line " + line_num + " column " + position1 + ".";
+                var error_msg = data.status + "! " + "Unexpected character " + token + " in line " + (parseInt(line_num)+1) + " column " + position1 + ".";
                 error_mark(error_msg, line_num, position1, position2);
             }
             else {
@@ -454,7 +454,7 @@
             headName = 'ε';
         }
         else if (head.name == 'NUM' || head.name == "ID") {
-            headName = head.name + "    -     " + grammarTree.value;
+            headName = head.name + ": " + grammarTree.value;
         }
         else if(head.name == 'END'){
             return;
@@ -465,7 +465,10 @@
         var kids = grammarTree.kids;
         var sub_tree = {
             text: headName,
-            nodes: []
+            nodes: [],
+            state: {
+                expanded: true,
+            }
         }
         for (var i = 0; i < kids.length; i++) {
             sub_tree.nodes[i] = read_tree_json(kids[i]);
